@@ -17,7 +17,7 @@ df2 = df2.dropna()
 tiempo_carga = df1.to_numpy().flatten().transpose()[:len(df2)] # Fuerzo
 lineal = df2.to_numpy().flatten().transpose()
 
-fitCoef = np.polyfit(tiempo_carga,lineal,1, full=True)
+fitCoef = np.polyfit(tiempo_carga,lineal,1)
 print(fitCoef)
 fity = fitCoef[0]*tiempo_carga + fitCoef[1]
 
@@ -37,7 +37,7 @@ plt.rcParams['mathtext.fontset']='stix'
 plt.rcParams['font.family']='STIXGeneral'
 
 
-ax.plot(tiempo_carga, lineal, "bo", color="black", markersize=4)
+ax.plot(tiempo_carga, lineal, "o", color="black", markersize=4)
 ax.plot(tiempo_carga, fity, "-", color="red", markersize=4)
 
 #ax.legend(loc="center right")
