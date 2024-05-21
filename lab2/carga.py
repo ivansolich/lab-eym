@@ -1,53 +1,48 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import scipy as sp
 
 plt.rcParams['text.usetex'] = True
+
+# Generaciond de datos
 
 df1 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\Lab2\datos.xlsx", sheet_name="datos",
                     usecols="B", skiprows=range(2), nrows=121, header=None)
 
-tiempo_carga = np.arange(0, 605, 5)
-tiempo_carga_10 = np.arange(0, 610, 10)
-voltaje_carga = df1.to_numpy().flatten().transpose()
-voltaje_carga_10 = np.empty(0)
+tiempoCarga = np.arange(0, 605, 5)
+voltajeCarga = df1.to_numpy().flatten().transpose()
+
+voltajeFuente = 14.12
+v_tau = voltajeCarga[-1] * 0.632  # %63,2 de carga de la fuente
+interp = np.interp(8.4688, voltajeCarga, tiempoCarga)
+print(interp)
 
 
-for i in range(len(voltaje_carga)):
-    if i % 2 == 0 or i == 0:
-        voltaje_carga_10 = np.append(voltaje_carga_10, voltaje_carga[i])
+# Ajuste exponencial
+def func(x, a, b):
+    return 13.38 * (1 - np.exp(-b * x))
 
 
-"""df2 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\Lab2\datos.xlsx", sheet_name="datos",
-                    usecols="D", skiprows=range(2), nrows=61, header=None)
+fit = sp.optimize.curve_fit(func, tiempoCarga, voltajeCarga) # Coeficientes
 
-voltaje_descarga = df2.to_numpy().flatten().transpose()
-tiempo_descarga = np.arange(0, 305, 5)"""
 
-voltaje_fuente = 14.12
-v_tau = voltaje_carga[-1] * 0.632 # %63,2 de carga de la fuente
+# Graficacion
 
-#fig, (ax1,ax2) = plt.subplots(1,2,figsize = (9,4))
-fix,ax = plt.subplots()
+fix, ax = plt.subplots()
 
 # Utilizar fuente de Latex
-plt.rcParams['mathtext.fontset']='stix'
-plt.rcParams['font.family']='STIXGeneral'
+plt.rcParams['mathtext.fontset'] = 'stix'
+plt.rcParams['font.family'] = 'STIXGeneral'
 
-
-ax.hlines(voltaje_fuente, 0, 600, colors="black", ls="--",label="Voltaje de la fuente = 14,12 V")
-ax.plot(tiempo_carga_10, voltaje_carga_10, "o", color="black", markersize=4)
-plt.xlim(0,600)
-
-
-"""ax2.hlines(0,0,300, colors="black",ls = "--")
-#ax2.plot(tiempo_descarga, voltaje_descarga, "-", color="tab:blue")
-ax2.plot(tiempo_descarga, voltaje_descarga, "o", color="tab:red")"""
+ax.hlines(voltajeFuente, 0, 600, colors="black", ls="--", label="Voltaje de la fuente = 14,12 V")
+ax.plot(tiempoCarga, voltajeCarga, "o", color="black", markersize=4, alpha=0.5)
+ax.plot(tiempoCarga, func(tiempoCarga,fit[0][0],fit[0][1]), '-', color="tab:red", markersize=4, alpha=0.5,label="Curva ajustada")
+plt.xlim(0, 600)
 
 ax.legend(loc="center right")
 ax.set_xlabel("Tiempo [s]")
 ax.set_ylabel("Voltaje [V]")
-
 
 plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img1.png")
 
