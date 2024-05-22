@@ -24,7 +24,6 @@ def modeloDescarga(x, v0, tau):
 
 params, _ = sp.optimize.curve_fit(modeloDescarga, tiempoDescarga, voltajeDescarga)  # Coeficientes
 v0Ajuste, tauAjuste = params
-print(v0Ajuste, tauAjuste)
 vPredicho = modeloDescarga(tiempoDescarga, v0Ajuste, tauAjuste)
 residuos = voltajeDescarga - vPredicho
 
