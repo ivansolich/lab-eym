@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import scipy as sp
 
 plt.rcParams['text.usetex'] = True
 
@@ -23,8 +24,10 @@ df2 = df2.dropna()
 tiempo_carga = df1.to_numpy().flatten().transpose()[:len(df2)] # Fuerzo
 lineal = df2.to_numpy().flatten().transpose()
 
-a,b = np.polyfit(tiempo_carga, lineal, 1)
-print(a,b)
+def func(x,a):
+    return a*x
+
+fit = sp.optimize.curve_fit(func, tiempo_carga, lineal)
 
 
 #Graficacion
@@ -37,13 +40,13 @@ plt.rcParams['font.family']='STIXGeneral'
 
 
 ax.plot(tiempo_carga, lineal, "bo", color="black", markersize=4)
-
+ax.plot(tiempo_carga, func(tiempo_carga, fit[0]), color="tab:red")
 
 
 ax.set_xlabel("Tiempo [s]")
 ax.set_ylabel(r"$ln(V/V_0)$")
 
 
-plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img1.png")
+plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img4.png")
 
 plt.show()

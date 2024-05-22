@@ -52,7 +52,7 @@ ax = fig.add_subplot(111)
 
 # # Dibujar las líneas de flujo con mapa de colores y estilos apropiados.
 
-color = 2 * np.log(np.hypot(Ex, Ey))
+color = 1 * np.log(np.hypot(Ex, Ey))
 
 ax.streamplot(
     x, y, Ex, Ey, color = color, linewidth = 1,
