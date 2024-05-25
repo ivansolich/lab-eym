@@ -37,7 +37,7 @@ plt.rcParams['font.family'] = 'STIXGeneral'
 
 ax1.hlines(0, vPredicho.min(), vPredicho.max())
 ax1.plot(vPredicho, residuos, "o", color="black", markersize=4)
-ax1.set_xlabel("Valores Ajustados")
+ax1.set_xlabel("Valores ajustados")
 ax1.set_ylabel("Residuos")
 
 ax2.hlines(0, tiempoDescarga.min(), tiempoDescarga.max())

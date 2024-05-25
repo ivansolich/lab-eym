@@ -26,26 +26,6 @@ incertidumbre = np.sqrt(np.diag(pcov)) # Calculo la desv stnd con la matriz de c
 incertidumbreV0, incertidumbreTau = incertidumbre
 #print(incertidumbreV0, incertidumbreTau)
 
-# Media ponderada de tau
-
-tau = np.array([tauCargaAjuste, tauDescargaAjuste])
-pesos = np.array([pesoTauCarga, pesoTauDescarga])
-
-def mediaPon(x, w):
-    return (x*w).sum()/w.sum()
-
-def devPon(w):
-    return np.sqrt(1/w.sum())
-
-mediaTau = mediaPon(tau, pesos)
-incertPon = devPon(pesos)
-
-# Valor de C
-
-R = 46400 #ohm
-C = mediaTau / R
-print(C)
-
 # Voltaje en funcion de tau
 
 vTau = modeloDescarga(tauDescargaAjuste, v0Ajuste, tauDescargaAjuste)
@@ -59,15 +39,16 @@ fix, ax = plt.subplots()
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.family'] = 'STIXGeneral'
 
-ax.hlines(0, 0, 300, colors="black", ls="--", label="$V_0$")
+ax.hlines(0, 0, 300, colors="black", ls="--",alpha=0.8)
 ax.plot(tiempoDescarga, voltajeDescarga, "o", color="black", markersize=4, alpha=0.5)
 ax.plot(tiempoDescarga, modeloDescarga(tiempoDescarga, v0Ajuste, tauDescargaAjuste), '-', color="tab:red", markersize=4, alpha=0.5, label="Curva ajustada")
 ax.plot(tauDescargaAjuste, vTau, "o", color="tab:green", markersize=4, label =r"$V(\tau)$")
 plt.xlim(0, 300)
 
-ax.legend(loc="center right")
+ax.legend(loc="upper right")
 ax.set_xlabel("Tiempo [s]")
 ax.set_ylabel("Voltaje [V]")
+plt.yscale("log")
 
 plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img2.png",dpi=300)
 

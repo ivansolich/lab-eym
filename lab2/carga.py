@@ -52,9 +52,10 @@ if __name__ == "__main__":
     ax.plot(tauCargaAjuste, vTau, "o", color="tab:green", markersize=4, label =r"$V(\tau)$")
 
     plt.xlim(0, 600)
-    ax.legend(loc="center right")
+    ax.legend(loc="center left")
     ax.set_xlabel("Tiempo [s]")
     ax.set_ylabel("Voltaje [V]")
+    plt.yscale("log")
 
     plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img1.png",dpi=300)
 

@@ -46,6 +46,6 @@ ax2.set_xlabel("Tiempo [s]")
 
 plt.tight_layout()
 
-plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img5.png",dpi=300)
+plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img5-1.png",dpi=300)
 
 plt.show()
