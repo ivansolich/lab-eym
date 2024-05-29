@@ -40,7 +40,7 @@ plt.rcParams['font.family']='STIXGeneral'
 
 
 ax.plot(tiempo_carga, lineal, "bo", color="black", markersize=4)
-ax.plot(tiempo_carga, func(tiempo_carga, fit[0]), color="tab:red")
+ax.plot(tiempo_carga, (-0.0372*tiempo_carga - 0.3356), color="tab:red")
 
 
 ax.set_xlabel("Tiempo [s]")

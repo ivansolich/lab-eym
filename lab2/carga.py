@@ -36,26 +36,40 @@ incertidumbreV0, incertidumbreTau = incertidumbre
 
 vTau = modeloCarga(tauCargaAjuste, v0Ajuste, tauCargaAjuste) # Esto corresponderia al 63,2% de la carga
 
+# Log scale
+
+a,b = np.polyfit(tiempoCarga, v0Ajuste-voltajeCarga, 1)
+print(a,b)
+
 # Graficacion
 
 if __name__ == "__main__":
 
-    fix, ax = plt.subplots()
+    fix, (ax1,ax2) = plt.subplots(1,2,figsize = (10,5))
 
     # Utilizar fuente de Latex
     plt.rcParams['mathtext.fontset'] = 'stix'
     plt.rcParams['font.family'] = 'STIXGeneral'
 
-    ax.hlines(14.12, 0, 600, colors="black", ls="--", label="$V_{0}$")
-    ax.plot(tiempoCarga, voltajeCarga, "o", color="black", markersize=4, alpha=0.5)
-    ax.plot(tiempoCarga, modeloCarga(tiempoCarga, v0Ajuste, tauCargaAjuste), '-', color="tab:red", markersize=4, alpha=0.5, label="Curva ajustada")
-    ax.plot(tauCargaAjuste, vTau, "o", color="tab:green", markersize=4, label =r"$V(\tau)$")
+    ax1.hlines(14.12, 0, 600, colors="black", ls="--", label="$V_{0}$")
+    ax1.plot(tiempoCarga, voltajeCarga, "o", color="black", markersize=4, alpha=0.5)
+    ax1.plot(tiempoCarga, modeloCarga(tiempoCarga, v0Ajuste, tauCargaAjuste), '-', color="tab:red", markersize=4, alpha=0.5, label="Curva ajustada")
+    ax1.plot(tauCargaAjuste, vTau, "o", color="tab:green", markersize=4, label =r"$V(\tau)$")
 
-    plt.xlim(0, 600)
-    ax.legend(loc="center left")
-    ax.set_xlabel("Tiempo [s]")
-    ax.set_ylabel("Voltaje [V]")
-    plt.yscale("log")
+
+    ax1.legend(loc="center right")
+    ax1.set_xlabel("Tiempo [s]")
+    ax1.set_ylabel("Voltaje [V]")
+
+    ax2.plot(tiempoCarga, v0Ajuste - voltajeCarga, 'o', color="black", markersize=4,alpha=0.5, label="Curva ajustada")
+
+
+
+    ax2.set_xlabel("Tiempo [s]")
+    ax2.set_ylabel("Voltaje [V]")
+    ax2.set_xlim(0,250)
+    ax2.set_yscale("log")
+    ax2.set_title("Escala Log")
 
     plt.savefig("F:\Facultad\Laboratorios\EyM\lab2\img1.png",dpi=300)
 
