@@ -39,8 +39,10 @@ sigmaV3 = sigmaV3[1:]
 longitud = np.arange(0, 1.05, 0.05)
 
 d = 0.000646
+error_d = 0.00001
 
 intensidad = [0.49, 0.35, 0.25]
+erroresI = [0.0647,0.0605,0.0575]
 
 rhoNicromo = 100*10**(-8)
 
@@ -60,6 +62,28 @@ m3, pcov3 = sp.optimize.curve_fit(func, longitud, V3)
 rho1 = (m1 * d**2 * np.pi) / (intensidad[0]*4)
 rho2 = (m2 * d**2 * np.pi) / (intensidad[1]*4)
 rho3 = (m3 * d**2 * np.pi) / (intensidad[2]*4)
+
+def errorRhoGrafico(m,d,I,delta_m,delta_d,delta_I):
+    partial_rho_m = (np.pi * d ** 2) / (4 * I)
+    partial_rho_d = (2 * m * np.pi * d) / (4 * I)
+    partial_rho_I = -(m * np.pi * d ** 2) / (4 * I ** 2)
+
+    # Calculamos la propagación de errores
+    delta_rho = (partial_rho_m * delta_m) ** 2 + (partial_rho_d * delta_d) ** 2 + (partial_rho_I * delta_I) ** 2
+    def sqrtArray(array):
+        for i in range(len(array)):
+            array[i] = np.sqrt(array[i])
+
+        return array
+
+    return sqrtArray(delta_rho)
+
+errorRho1 = errorRhoGrafico(m1,d,intensidad[0],pcov1,error_d,erroresI[0])
+errorRho2 = errorRhoGrafico(m2,d,intensidad[1],pcov2,error_d,erroresI[1])
+errorRho3 = errorRhoGrafico(m3,d,intensidad[2],pcov3,error_d,erroresI[2])
+
+rhoGrafico = [rho1,rho2,rho3]
+errorRhoGrafico = [errorRho1,errorRho2,errorRho3]
 
 
 # Metodo analitico
@@ -127,6 +151,9 @@ def mean(data,weights):
 rho1_analitico, error1Analitico = mean(listaRho1, sigmaRho1)
 rho2_analitico, error2Analitico = mean(listaRho2, sigmaRho2)
 rho3_analitico, error3Analitico = mean(listaRho3, sigmaRho3)
+
+rhoAnalitico = [rho1_analitico,rho2_analitico,rho3_analitico]
+errorRhoAnalitico = [error1Analitico,error2Analitico,error3Analitico]
 
 ### Graficacion
 
