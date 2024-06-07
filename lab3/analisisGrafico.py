@@ -55,7 +55,7 @@ m1, pcov1 = sp.optimize.curve_fit(func, longitud, V1)
 m2, pcov2 = sp.optimize.curve_fit(func, longitud, V2)
 m3, pcov3 = sp.optimize.curve_fit(func, longitud, V3)
 
-### Obtencion de rho
+# ----------- Obtencion de rho ------------ #
 
 # Metodo grafico
 
@@ -98,27 +98,15 @@ def calcular_delta_rho(V, d, I, L, delta_V, delta_d, delta_I, delta_L): # Funcio
     pi = np.pi
 
     # Términos de la propagación del error
-    term1 = (pi * d ** 2 / (4 * I * L)) * delta_V
-    term2 = (2 * V * pi * d / (4 * I * L)) * delta_d
-    term3 = (V * pi * d ** 2 / (4 * I ** 2 * L)) * delta_I
-    term4 = (V * pi * d ** 2 / (4 * I * L ** 2)) * delta_L
-
-    term1 = np.power((term1),2)
-    term2 = np.power((term2),2)
-    term3 = np.power((term3),2)
-    term4 = np.power((term4), 2)
+    term1 = ((pi * d ** 2 / (4 * I * L)) * delta_V)**2
+    term2 = ((2 * V * pi * d / (4 * I * L)) * delta_d)**2
+    term3 = ((V * pi * d ** 2 / (4 * I ** 2 * L)) * delta_I)**2
+    term4 = ((V * pi * d ** 2 / (4 * I * L ** 2)) * delta_L)**2
 
     # Cálculo de la incertidumbre combinada
-    delta_rho = term1 + term2 + term3 + term4
-    delta_rho.astype(float)
+    delta_rho = (term1 + term2 + term3 + term4)**0.5
 
-    def sqrtArray(array):
-        for i in range(len(array)):
-            array[i] = np.sqrt(array[i])
-
-        return array
-
-    return sqrtArray(delta_rho)
+    return delta_rho
 
 
 # Listas de rho para cada serie
@@ -154,7 +142,3 @@ rho3_analitico, error3Analitico = mean(listaRho3, sigmaRho3)
 
 rhoAnalitico = [rho1_analitico,rho2_analitico,rho3_analitico]
 errorRhoAnalitico = [error1Analitico,error2Analitico,error3Analitico]
-
-### Graficacion
-
-# Utilizar fuente de Latex

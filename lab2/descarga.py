@@ -24,11 +24,13 @@ pesoTauDescarga = 1/pcov[1][1]
 incertidumbre = np.sqrt(np.diag(pcov)) # Calculo la desv stnd con la matriz de covarianza
 incertidumbreV0, incertidumbreTau = incertidumbre
 
+print(tauDescargaAjuste,incertidumbreTau)
+
 
 # Voltaje en funcion de tau
 
 vTau = modeloDescarga(tauDescargaAjuste, v0Ajuste, tauDescargaAjuste)
-#print(vTau)
+
 
 # Graficacion
 

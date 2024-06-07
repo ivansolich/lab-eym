@@ -22,9 +22,12 @@ def modeloCarga(x, v0, tau):
 params, pcov = sp.optimize.curve_fit(modeloCarga, tiempoCarga, voltajeCarga) # Coeficientes
 v0Ajuste, tauCargaAjuste = params
 
+
 pesoTauCarga = 1/pcov[1][1]
 
 incertidumbre = np.sqrt(np.diag(pcov)) # Calculo la desv stnd con la matriz de covarianza
+print(tauCargaAjuste)
+print(incertidumbre)
 incertidumbreV0, incertidumbreTau = incertidumbre
 
 """if __name__ == "__main__":
@@ -39,7 +42,6 @@ vTau = modeloCarga(tauCargaAjuste, v0Ajuste, tauCargaAjuste) # Esto corresponder
 # Log scale
 
 a,b = np.polyfit(tiempoCarga, v0Ajuste-voltajeCarga, 1)
-print(a,b)
 
 # Graficacion
 
