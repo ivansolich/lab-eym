@@ -7,22 +7,22 @@ plt.rcParams['text.usetex'] = True
 
 # Generaciond de datos
 
-df1 = pd.read_excel(r"datos3.xlsx", sheet_name="datos",
+df1 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\prog\lab3\datos3.xlsx", sheet_name="datos",
                     usecols="E", skiprows=range(1), nrows=21, header=None)
 
-df2 = pd.read_excel(r"datos3.xlsx", sheet_name="datos",
+df2 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\prog\lab3\datos3.xlsx", sheet_name="datos",
                     usecols="I", skiprows=range(1), nrows=21, header=None)
 
-df3 = pd.read_excel(r"datos3.xlsx", sheet_name="datos",
+df3 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\prog\lab3\datos3.xlsx", sheet_name="datos",
                     usecols="M", skiprows=range(1), nrows=21, header=None)
 
-df4 = pd.read_excel(r"datos3.xlsx", sheet_name="datos",
+df4 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\prog\lab3\datos3.xlsx", sheet_name="datos",
                     usecols="G", skiprows=range(24), nrows=21, header=None)
 
-df5 = pd.read_excel(r"datos3.xlsx", sheet_name="datos",
+df5 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\prog\lab3\datos3.xlsx", sheet_name="datos",
                     usecols="H", skiprows=range(24), nrows=21, header=None)
 
-df6 = pd.read_excel(r"datos3.xlsx", sheet_name="datos",
+df6 = pd.read_excel(r"F:\Facultad\Laboratorios\EyM\prog\lab3\datos3.xlsx", sheet_name="datos",
                     usecols="I", skiprows=range(24), nrows=21, header=None)
 
 V1 = df1.to_numpy().flatten().transpose()
@@ -32,19 +32,19 @@ V3 = df3.to_numpy().flatten().transpose()
 sigmaV1 = df4.to_numpy().flatten().transpose()
 sigmaV2 = df5.to_numpy().flatten().transpose()
 sigmaV3 = df6.to_numpy().flatten().transpose()
+
 sigmaV1 = sigmaV1[1:]
 sigmaV2 = sigmaV2[1:]
 sigmaV3 = sigmaV3[1:]
 
 longitud = np.arange(0, 1.05, 0.05)
 
+
 d = 0.000646
 error_d = 0.00001
 
 intensidad = [0.49, 0.35, 0.25]
 erroresI = [0.0647,0.0605,0.0575]
-
-rhoNicromo = 100*10**(-8)
 
 
 def func(x, a):
@@ -55,9 +55,10 @@ m1, pcov1 = sp.optimize.curve_fit(func, longitud, V1)
 m2, pcov2 = sp.optimize.curve_fit(func, longitud, V2)
 m3, pcov3 = sp.optimize.curve_fit(func, longitud, V3)
 
+
 # ----------- Obtencion de rho ------------ #
 
-# Metodo grafico
+# ----------- Metodo grafico -------------- #
 
 rho1 = (m1 * d**2 * np.pi) / (intensidad[0]*4)
 rho2 = (m2 * d**2 * np.pi) / (intensidad[1]*4)
@@ -86,7 +87,7 @@ rhoGrafico = [rho1,rho2,rho3]
 errorRhoGrafico = [errorRho1,errorRho2,errorRho3]
 
 
-# Metodo analitico
+# ------------- Metodo analitico ------------ #
 
 Lerror = 0.001
 areaError = 0.001
@@ -114,16 +115,17 @@ listaRho1 = rho(V1, longitud, intensidad[0], d)
 listaRho2 = rho(V2, longitud, intensidad[1], d)
 listaRho3 = rho(V3, longitud, intensidad[2], d)
 
+
 # Error de cada rho
-sigmaRho1 = calcular_delta_rho(V1[1:],d,intensidad[0],longitud[1:],sigmaV1,0.00001,0.0647,0.001)
-sigmaRho2 = calcular_delta_rho(V2[1:],d,intensidad[1],longitud[1:],sigmaV2,0.00001,0.0605,0.001)
-sigmaRho3 = calcular_delta_rho(V3[1:],d,intensidad[2],longitud[1:],sigmaV3,0.00001,0.0575,0.001)
+sigmaRho1 = calcular_delta_rho(V1[1:],d,intensidad[0],longitud[1:],sigmaV1,0.00001,0.050147,0.001)
+sigmaRho2 = calcular_delta_rho(V2[1:],d,intensidad[1],longitud[1:],sigmaV2,0.00001,0.05,0.001)
+sigmaRho3 = calcular_delta_rho(V3[1:],d,intensidad[2],longitud[1:],sigmaV3,0.00001,0.05,0.001)
 
 
-# Media monderada de rho para cada serie de mediciones
+# Media ponderada de rho para cada serie de mediciones
 
 def mean(data,weights):
-    mean_weighted = np.average(data, weights=weights)
+    mean_weighted = np.average(data, weights=1/weights)
 
     # Calcular la varianza ponderada
     weighted_variance = np.sum(weights * (data - mean_weighted) ** 2) / np.sum(weights)
@@ -142,3 +144,6 @@ rho3_analitico, error3Analitico = mean(listaRho3, sigmaRho3)
 
 rhoAnalitico = [rho1_analitico,rho2_analitico,rho3_analitico]
 errorRhoAnalitico = [error1Analitico,error2Analitico,error3Analitico]
+
+print(rhoAnalitico)
+print(errorRhoAnalitico)

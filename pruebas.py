@@ -1,24 +1,32 @@
-import numpy as np
-import matplotlib.pyplot as plt
+def grafica(m, v, pcov, longitud):
+    # Error estándar de la pendiente
+    sigma_m = np.sqrt(pcov[0, 0])
 
-# Generar datos de ejemplo
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+    # Calcular los valores ajustados y las bandas de error
+    y_fit = m * longitud
+    y_fit_upper = (m + sigma_m) * longitud
+    y_fit_lower = (m - sigma_m) * longitud
 
-# Calcular el gradiente
-gradiente = np.gradient(y, x)
+    # Crear la gráfica
+    plt.figure(figsize=(10, 6))
 
-# Graficar los datos y el gradiente
-plt.figure(figsize=(10, 5))
-plt.subplot(2, 1, 1)
-plt.plot(x, y, label='Función original')
-plt.title('Función original')
-plt.legend()
+    # Línea de ajuste
+    plt.plot(longitud, y_fit, color='black', linestyle='-', label='Ajuste lineal')
 
-plt.subplot(2, 1, 2)
-plt.plot(x, gradiente, label='Gradiente')
-plt.title('Gradiente')
-plt.legend()
+    # Puntos de datos
+    plt.scatter(longitud, v, color='white', edgecolors='tab:red', s=40, label='Datos')
 
-plt.tight_layout()
-plt.show()
+    # Barras de error (en x)
+    plt.errorbar(longitud, v, xerr=0.001, fmt='None', ecolor='tab:red', alpha=0.5)
+
+    # Área de error
+    plt.fill_between(longitud, y_fit_lower, y_fit_upper, color='red', alpha=0.2, label='Área de error')
+
+    # Etiquetas y leyenda
+    plt.ylabel(r'Voltaje $[V]$')
+    plt.xlabel(r'Longitud $[m]$')
+    plt.legend()
+    plt.grid(True)
+
+    # Mostrar la gráfica
+    plt.show()
