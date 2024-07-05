@@ -1,6 +1,19 @@
+import os
 import serial
 import time
 import matplotlib.pyplot as plt
+
+# Función para obtener un nombre de archivo que no exista
+def obtener_nombre_archivo(base):
+    i = 0
+    archivo = f'{base}.txt'
+    while os.path.exists(archivo):
+        i += 1
+        archivo = f'{base}{i}.txt'
+    return archivo
+
+# Obtener el nombre del archivo de salida
+archivo_salida = obtener_nombre_archivo('data')
 
 # Cambia '/dev/ttyUSB0' al puerto serial correspondiente en tu sistema
 ser = serial.Serial('/dev/ttyACM0', 9600)
@@ -10,7 +23,7 @@ time.sleep(2)
 data_list_1 = []  # Lista para almacenar el primer valor de cada línea
 data_list_2 = []  # Lista para almacenar el segundo valor de cada línea
 
-with open('misdatos.txt', 'w') as file:  # Cambiado de 'a' a 'w'
+with open(archivo_salida, 'w') as file:
     try:
         while True:
             if ser.in_waiting > 0:
